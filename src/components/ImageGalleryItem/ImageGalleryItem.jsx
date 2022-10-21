@@ -14,7 +14,12 @@ export const GalleryItem = ({ gallery, openModal }) => {
             }}
             rel="noreferrer"
           >
-            <img className={s.image} src={webformatURL} alt={tags} width="350"  />
+            <img
+              className={s.image}
+              src={webformatURL}
+              alt={tags}
+              width="350"
+            />
           </a>
         </li>
       ))}
@@ -22,7 +27,7 @@ export const GalleryItem = ({ gallery, openModal }) => {
   );
 };
 
-GalleryItem.propTypes={
+GalleryItem.propTypes = {
   gallery: PropTypes.array.isRequired,
   openModal: PropTypes.func.isRequired,
-}
+};
