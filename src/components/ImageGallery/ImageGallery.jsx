@@ -1,9 +1,7 @@
-/* eslint-disable jsx-a11y/anchor-is-valid */
-
 import { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { axiosPicture } from '../../Services/picture-api';
-
+import { GalleryItem } from 'components/ImageGalleryItem/ImageGalleryItem';
 import { ButtonPagination } from 'components/Button/Button';
 import { Modal } from '../Modal/Modal';
 import ThreeDots from '../Loader/Loader';
@@ -20,31 +18,6 @@ export const Gallery = ({ searchQuery }) => {
   const [currentImage, setCurrentImage] = useState(null);
   const ref = useRef(null);
   const refPage = useRef(null);
-
-  const GalleryItem = ({ gallery, openModal }) => {
-    return (
-      <>
-        {gallery.map(({ id, webformatURL, tags, largeImageURL }) => (
-          <li key={id} className={s.itemGallery}>
-            <a
-              href="#"
-              onClick={() => {
-                openModal({ src: largeImageURL, alt: tags });
-              }}
-              rel="noreferrer"
-            >
-              <img
-                className={s.image}
-                src={webformatURL}
-                alt={tags}
-                width="350"
-              />
-            </a>
-          </li>
-        ))}
-      </>
-    );
-  };
 
   const notify = () => {
     toast.warn('Did not find anything! Please change the request.');
@@ -100,9 +73,14 @@ export const Gallery = ({ searchQuery }) => {
       {!isLoading && !error && gallery.length === 0 && <ToastContainer />}
 
       <ul className={s.gallery}>
-        {!!gallery.length && (
-          <GalleryItem gallery={gallery} openModal={updateCurrentImage} />
-        )}
+        {!!gallery.length &&
+          gallery.map(item => (
+            <GalleryItem
+              {...item}
+              key={item.id}
+              openModal={updateCurrentImage}
+            />
+          ))}
       </ul>
       {isLoading && <ThreeDots />}
       {!!gallery.length && gallery.length >= page * 12 && (
