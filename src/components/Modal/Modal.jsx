@@ -1,36 +1,32 @@
-import { Component } from 'react';
+import { useEffect } from 'react';
 
-export class Modal extends Component {
-  closeByEscape = e => {
+export const Modal = ({ modalImage: { src, alt }, closeModal }) => {
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  const closeByEscape = e => {
     if (e.code === 'Escape') {
-      this.props.closeModal();
+      closeModal();
     }
   };
 
-  closeByBackdrop = event => {
-    if (event.currentTarget === event.target) {
-      this.props.closeModal();
+  const closeByBackdrop = e => {
+    if (e.currentTarget === e.target) {
+      closeModal();
     }
   };
 
-  componentDidMount() {
-    window.addEventListener('keydown', this.closeByEscape);
-  }
+  useEffect(() => {
+    window.addEventListener('keydown', closeByEscape);
 
-  componentWillUnmount() {
-    window.removeEventListener('keydown', this.closeByEscape);
-  }
-  render() {
-    const {
-      modalImage: { src, alt },
-    } = this.props;
+    return () => {
+      window.removeEventListener('keydown', closeByEscape);
+    };
+  }, [closeByEscape]);
 
-    return (
-      <div className="Overlay" onClick={this.closeByBackdrop}>
-        <div className="Modal">
-          <img src={src} alt={alt} />
-        </div>
+  return (
+    <div className="Overlay" onClick={closeByBackdrop}>
+      <div className="Modal">
+        <img src={src} alt={alt} />
       </div>
-    );
-  }
-}
+    </div>
+  );
+};

@@ -1,44 +1,42 @@
 import PropTypes from 'prop-types';
-import { Component } from 'react';
+import { useState } from 'react';
 import { BsSearch } from 'react-icons/bs';
 
-class Searchbar extends Component {
-  state = { query: '' };
+const Searchbar = ({ onSubmit }) => {
+  const [query, setQuery] = useState('');
 
-  handleChange = e => {
-    this.setState({ query: e.currentTarget.value.toLowerCase() });
+  const handleChange = ({ currentTarget: { value } }) => {
+    setQuery(value.toLowerCase());
   };
 
-  handleSubmit = e => {
+  const handleSubmit = e => {
     e.preventDefault();
 
-    if (this.state.query.trim() === '') return;
-    this.props.onSubmit(this.state.query);
-    this.setState({ query: '' });
+    if (query.trim() === '') return;
+    onSubmit(query);
+    setQuery('');
   };
 
-  render() {
-    return (
-      <header className="Searchbar">
-        <form onSubmit={this.handleSubmit} className="SearchForm">
-          <button type="submit" className="SearchForm-button">
-            <BsSearch style={{ height: '20px', width: '30px' }} />
-          </button>
+  return (
+    <header className="Searchbar">
+      <form onSubmit={handleSubmit} className="SearchForm">
+        <button type="submit" className="SearchForm-button">
+          <BsSearch style={{ height: '20px', width: '30px' }} />
+        </button>
 
-          <input
-            className="SearchForm-input"
-            type="text"
-            autoComplete="off"
-            autoFocus
-            placeholder="Search images and photos"
-            value={this.state.query}
-            onChange={this.handleChange}
-          />
-        </form>
-      </header>
-    );
-  }
-}
+        <input
+          className="SearchForm-input"
+          type="text"
+          autoComplete="off"
+          autoFocus
+          placeholder="Search images and photos"
+          value={query}
+          onChange={handleChange}
+        />
+      </form>
+    </header>
+  );
+};
 
 Searchbar.propTypes = {
   onSubmit: PropTypes.func.isRequired,
